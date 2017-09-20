@@ -124,7 +124,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <executions>
           <execution>
-            <!-- Spring Boot Actuator displays build-related information 
+            <!-- Spring Boot Actuator displays build-related information
               if a META-INF/build-info.properties file is present -->
             <goals>
               <goal>build-info</goal>
@@ -157,7 +157,7 @@
         </executions>
       </plugin>
 
-      <!-- Spring Boot Actuator displays build-related information if a git.properties 
+      <!-- Spring Boot Actuator displays build-related information if a git.properties
         file is present at the classpath -->
       <plugin>
         <groupId>pl.project13.maven</groupId>
@@ -206,6 +206,37 @@
           </dependency>
         </dependencies>
       </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>cobertura-inplace-merge</id>
+                    <phase>package</phase>
+                    <configuration>
+                        <tasks>
+                            <taskdef classpathref="maven.plugin.classpath" resource="tasks.properties" />
+                            <cobertura-merge>
+                                <fileset dir="${basedir}">
+                                    <include name="${project.reporting.datafile.dir}/cobertura*.ser" />
+                                </fileset>
+                            </cobertura-merge>
+                            <cobertura-report format="html" datafile="${basedir}/cobertura.ser" destdir="${basedir}/${project.reporting.dir}" srcDir="${basedir}" />
+                        </tasks>
+                    </configuration>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <dependencies>
+                <dependency>
+                    <groupId>net.sourceforge.cobertura</groupId>
+                    <artifactId>cobertura</artifactId>
+                    <version>1.9.4.1</version>
+                </dependency>
+            </dependencies>
+        </plugin>
     </plugins>
   </build>
   <reporting>
